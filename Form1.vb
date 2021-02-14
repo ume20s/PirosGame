@@ -50,7 +50,6 @@ Public Class Form1
         Dim i As Integer
 
         For i = 0 To 100
-            yoooi.Visible = True
             System.Threading.Thread.Sleep(10)
             System.Windows.Forms.Application.DoEvents()
         Next
