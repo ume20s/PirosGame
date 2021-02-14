@@ -1,4 +1,4 @@
-﻿Public Class Form1
+Public Class Form1
     'PictureBoxコントロール配列のフィールドを作成
     Private Lblock() As System.Windows.Forms.PictureBox
     Private Rblock() As System.Windows.Forms.PictureBox
@@ -19,6 +19,7 @@
         ' スコアの初期化
         score = 0
         ScoreLabel.Text = score.ToString.PadLeft(5, "0")
+
         ' 時間の初期化
         mm = 0
         ss = 0
@@ -44,6 +45,25 @@
         Next
     End Sub
 
+    'よーいどん！
+    Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        Dim i As Integer
+
+        For i = 0 To 100
+            yoooi.Visible = True
+            System.Threading.Thread.Sleep(10)
+            System.Windows.Forms.Application.DoEvents()
+        Next
+        yoooi.Text = "どん！"
+        For i = 0 To 50
+            System.Threading.Thread.Sleep(10)
+            System.Windows.Forms.Application.DoEvents()
+        Next
+        yoooi.Visible = False
+        Timer1.Enabled = True
+        Timer2.Enabled = True
+    End Sub
+
     ' 時間表示用タイマー
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         ss = ss + 1
@@ -52,11 +72,7 @@
             ss = 0
         End If
         MinLabel.Text = mm
-        If ss < 10 Then
-            SecLabel.Text = "0" & ss
-        Else
-            SecLabel.Text = ss
-        End If
+        SecLabel.Text = ss.ToString.ToString.PadLeft(2, "0")
     End Sub
 
     ' ブロック操作用タイマー
@@ -189,17 +205,6 @@
         Panel2.Controls.Add(Rblock(num))
     End Sub
 
-    ' 動画撮影用にひそかに右パネルを動作スイッチにしている
-    Private Sub Panel1_MouseUp(sender As Object, e As MouseEventArgs) Handles Panel1.MouseUp
-        If Timer2.Enabled = False Then
-            Timer1.Enabled = True
-            Timer2.Enabled = True
-        Else
-            Timer1.Enabled = False
-            Timer2.Enabled = False
-        End If
-    End Sub
-
     ' エンディング（引数が１だったら右が勝利）
     Private Sub Ending(win As Integer)
         Dim i, j As Integer
@@ -213,11 +218,11 @@
             Lend2.Image = My.Resources.pirosuke
             Rend1.Image = My.Resources.yattane
             Rend2.Image = My.Resources.yuimarl
-            For i = 0 To 100
+            For i = 0 To 50
                 For j = 0 To Lnum
                     Lblock(j).Top = Lblock(j).Top + vec
                 Next
-                SleepDoEvents(1)
+                System.Threading.Thread.Sleep(12)
                 vec = vec + 1
             Next
         Else
@@ -225,12 +230,11 @@
             Lend2.Image = My.Resources.yuimarl
             Rend1.Image = My.Resources.zannen
             Rend2.Image = My.Resources.pirosuke
-            For i = 0 To 100
+            For i = 0 To 50
                 For j = 0 To Rnum
                     Rblock(j).Top = Rblock(j).Top + vec
-                    ' System.Threading.Thread.Sleep(10)
                 Next
-                SleepDoEvents(1)
+                System.Threading.Thread.Sleep(12)
                 vec = vec + 1
             Next
         End If
@@ -249,18 +253,16 @@
             End If
         ElseIf e.KeyCode = Keys.Right Then  ' 右矢印キー
             RposX = RposX + 1
-            If RposX >= 10 Then
-                RposX = 10
+            If Rblock(Rnum).Width = 20 Then
+                If RposX >= 11 Then
+                    RposX = 11
+                End If
+            Else
+                If RposX >= 10 Then
+                    RposX = 10
+                End If
             End If
         End If
         Me.Rblock(Rnum).Location = New Point(RposX * 20, RposY)
-    End Sub
-
-    Public Sub SleepDoEvents(ByVal mSec As Long)
-        Dim i As Long
-        For i = 0 To mSec Step 10
-            System.Threading.Thread.Sleep(10)
-            System.Windows.Forms.Application.DoEvents()
-        Next i
     End Sub
 End Class
