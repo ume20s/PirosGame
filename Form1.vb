@@ -165,7 +165,7 @@ Public Class Form1
                 Me.Lblock(num).Image = My.Resources.O
                 Me.Lblock(num).Size = New Size(40, 60)
             Case Else  ' S
-                Me.Lblock(num).Image = My.Resources.P
+                Me.Lblock(num).Image = My.Resources.
                 Me.Lblock(num).Size = New Size(40, 60)
         End Select
         LposX = r.Next(11)
