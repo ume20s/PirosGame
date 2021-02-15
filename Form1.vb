@@ -102,6 +102,7 @@ Public Class Form1
                 Lcreate(Lnum)
             End If
         End If
+
         ' 右移動
         RposY = RposY + 20
         Rblock(Rnum).Top = RposY
@@ -109,7 +110,7 @@ Public Class Form1
         ' 右底に着いたか
         If Rblock(Rnum).Width = 20 Then ' Iの処理
             If Rbt(RposX) <= Rblock(Rnum).Top + Rblock(Rnum).Height Then
-                Rbt(RposX) = Rbt(RposX) - Rblock(Rnum).Height
+                Rbt(RposX) = Rblock(Rnum).Top
                 Rnum = Rnum + 1
                 Rcreate(Rnum)
                 score = score + 10
@@ -117,14 +118,14 @@ Public Class Form1
             End If
         Else                            ' PROSの処理
             If Rbt(RposX) <= Rblock(Rnum).Top + Rblock(Rnum).Height Then
-                Rbt(RposX) = Rbt(RposX) - Rblock(Rnum).Height
+                Rbt(RposX) = Rblock(Rnum).Top
                 Rbt(RposX + 1) = Rbt(RposX)
                 Rnum = Rnum + 1
                 Rcreate(Rnum)
                 score = score + 20
                 ScoreLabel.Text = score.ToString.PadLeft(5, "0")
             ElseIf Rbt(RposX + 1) <= Rblock(Rnum).Top + Rblock(Rnum).Height Then
-                Rbt(RposX + 1) = Rbt(RposX + 1) - Rblock(Rnum).Height
+                Rbt(RposX) = Rblock(Rnum).Top
                 Rbt(RposX) = Rbt(RposX + 1)
                 Rnum = Rnum + 1
                 Rcreate(Rnum)
