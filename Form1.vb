@@ -47,13 +47,13 @@ Public Class Form1
 
         yoooi.Text = "よーい"
         For i = 0 To 100
-            'System.Threading.Thread.Sleep(10)
-            'System.Windows.Forms.Application.DoEvents()
+            System.Threading.Thread.Sleep(10)
+            System.Windows.Forms.Application.DoEvents()
         Next
         yoooi.Text = "どん！"
         For i = 0 To 50
-            'System.Threading.Thread.Sleep(10)
-            'System.Windows.Forms.Application.DoEvents()
+            System.Threading.Thread.Sleep(10)
+            System.Windows.Forms.Application.DoEvents()
         Next
         yoooi.Visible = False
         Timer1.Enabled = True
