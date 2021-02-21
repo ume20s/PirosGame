@@ -8,3 +8,4 @@
 
 キャラクターの著作権は ふぃーさん（ @fizyfazy ）とみ～太郎さん（ @masaru38_yakumo
 ）の娘さんに帰属します
+BGMの著作権は NAKさん（ @NakSpector ）に帰属します
