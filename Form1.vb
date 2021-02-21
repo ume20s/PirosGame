@@ -24,11 +24,7 @@ Public Class Form1
         mm = 0
         ss = 0
         MinLabel.Text = mm
-        If ss < 10 Then
-            SecLabel.Text = "0" & ss
-        Else
-            SecLabel.Text = ss
-        End If
+        SecLabel.Text = ss.ToString.ToString.PadLeft(2, "0")
 
         ' ブロックの初期化
         Me.Lblock = New System.Windows.Forms.PictureBox(100) {}
@@ -49,18 +45,30 @@ Public Class Form1
     Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         Dim i As Integer
 
+        yoooi.Text = "よーい"
         For i = 0 To 100
-            System.Threading.Thread.Sleep(10)
-            System.Windows.Forms.Application.DoEvents()
+            'System.Threading.Thread.Sleep(10)
+            'System.Windows.Forms.Application.DoEvents()
         Next
         yoooi.Text = "どん！"
         For i = 0 To 50
-            System.Threading.Thread.Sleep(10)
-            System.Windows.Forms.Application.DoEvents()
+            'System.Threading.Thread.Sleep(10)
+            'System.Windows.Forms.Application.DoEvents()
         Next
         yoooi.Visible = False
         Timer1.Enabled = True
         Timer2.Enabled = True
+
+        ' ループBGMの再生開始
+        Dim bgm_roop As System.IO.Stream = My.Resources.Resource1.roop
+        My.Computer.Audio.Play(bgm_roop, AudioPlayMode.BackgroundLoop)
+        bgm_roop.Close()
+
+    End Sub
+
+    ' ゲーム途中にformを閉じた時にBGMをとめる
+    Private Sub Form1_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        My.Computer.Audio.Stop()
     End Sub
 
     ' 時間表示用タイマー
@@ -85,24 +93,23 @@ Public Class Form1
         ' 左底に着いたか判定
         If Lblock(Lnum).Width = 20 Then ' Iの処理
             If Lbt(LposX) <= Lblock(Lnum).Top + Lblock(Lnum).Height Then
-                Lbt(LposX) = Lbt(LposX) - Lblock(Lnum).Height
+                Lbt(LposX) = Lblock(Lnum).Top
                 Lnum = Lnum + 1
                 Lcreate(Lnum)
             End If
         Else                            ' PROSの処理
             If Lbt(LposX) <= Lblock(Lnum).Top + Lblock(Lnum).Height Then
-                Lbt(LposX) = Lbt(LposX) - Lblock(Lnum).Height
+                Lbt(LposX) = Lblock(Lnum).Top
                 Lbt(LposX + 1) = Lbt(LposX)
                 Lnum = Lnum + 1
                 Lcreate(Lnum)
             ElseIf Lbt(LposX + 1) <= Lblock(Lnum).Top + Lblock(Lnum).Height Then
-                Lbt(LposX + 1) = Lbt(LposX + 1) - Lblock(Lnum).Height
+                Lbt(LposX + 1) = Lblock(Lnum).Top
                 Lbt(LposX) = Lbt(LposX + 1)
                 Lnum = Lnum + 1
                 Lcreate(Lnum)
             End If
         End If
-
         ' 右移動
         RposY = RposY + 20
         Rblock(Rnum).Top = RposY
@@ -125,7 +132,7 @@ Public Class Form1
                 score = score + 20
                 ScoreLabel.Text = score.ToString.PadLeft(5, "0")
             ElseIf Rbt(RposX + 1) <= Rblock(Rnum).Top + Rblock(Rnum).Height Then
-                Rbt(RposX) = Rblock(Rnum).Top
+                Rbt(RposX + 1) = Rblock(Rnum).Top
                 Rbt(RposX) = Rbt(RposX + 1)
                 Rnum = Rnum + 1
                 Rcreate(Rnum)
@@ -136,12 +143,12 @@ Public Class Form1
 
         ' 終了判定
         For i = 0 To 12
-            If Lbt(i) <= 10 Then
+            If Lbt(i) <= 0 Then
                 Ending(1)
             End If
         Next
         For i = 0 To 12
-            If Rbt(i) <= 10 Then
+            If Rbt(i) <= 0 Then
                 Ending(2)
             End If
         Next
@@ -210,19 +217,28 @@ Public Class Form1
         Dim i, j As Integer
         Dim vec As Integer
 
+        ' タイマーストップ
         Timer1.Enabled = False
         Timer2.Enabled = False
+
+        ' ゲームオーバーBGM
+        Dim bgm_over As System.IO.Stream = My.Resources.Resource1.gameover
+        My.Computer.Audio.Play(bgm_over, AudioPlayMode.Background)
+        bgm_over.Close()
+
+        ' ブロックガラガラ
         vec = -20
         If win = 1 Then
             Lend1.Image = My.Resources.zannen
             Lend2.Image = My.Resources.pirosuke
             Rend1.Image = My.Resources.yattane
             Rend2.Image = My.Resources.yuimarl
-            For i = 0 To 50
+            For i = 0 To 70
                 For j = 0 To Lnum
                     Lblock(j).Top = Lblock(j).Top + vec
                 Next
                 System.Threading.Thread.Sleep(12)
+                System.Windows.Forms.Application.DoEvents()
                 vec = vec + 1
             Next
         Else
@@ -230,18 +246,24 @@ Public Class Form1
             Lend2.Image = My.Resources.yuimarl
             Rend1.Image = My.Resources.zannen
             Rend2.Image = My.Resources.pirosuke
-            For i = 0 To 50
+            For i = 0 To 70
                 For j = 0 To Rnum
                     Rblock(j).Top = Rblock(j).Top + vec
                 Next
                 System.Threading.Thread.Sleep(12)
+                System.Windows.Forms.Application.DoEvents()
                 vec = vec + 1
             Next
         End If
+
+        ' リザルト表示
         Lend1.Visible = True
         Lend2.Visible = True
         Rend1.Visible = True
         Rend2.Visible = True
+
+        ' BGMの後始末
+        My.Computer.Audio.Stop()
     End Sub
 
     ' キー入力で移動
